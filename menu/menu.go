@@ -6,28 +6,38 @@ import (
 	"os"
 )
 
-type Pengguna struct {
-	IdMenu    int    `json:"id_menu"`
-	Nama      string `json:"nama"`
-	Harga     int    `json:"harga"`
-	Deskripsi string `json:"deskripsi"`
-	Kategori  string `json:"kategori"`
+type User struct {
+	IdMenu    int    `json:"idmenu"`
+	Name      string `json:"nama"`
+	Price     int    `json:"harga"`
+	Description string `json:"deskripsi"`
+	Category  string `json:"kategori"`
 }
 
 
-func ListMenu() []Pengguna{
+func ListMenu() []User{
 	file, err := os.Open("menu.json")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer file.Close()
 
-	var daftarMenu []Pengguna
+	var ListMenu []User
 
 	// Gunakan decoder langsung dari file
-	err = json.NewDecoder(file).Decode(&daftarMenu)
+	err = json.NewDecoder(file).Decode(&ListMenu)
 	if err != nil {
 		log.Fatal(err)
 	}
-	return daftarMenu
+	return ListMenu
+}
+
+func FilterMenu(items []User, targetCategory string) []User {
+    var result []User
+    for _, item := range items {
+        if item.Category == targetCategory {
+            result = append(result, item)
+        }
+    }
+    return result
 }
