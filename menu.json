@@ -1,0 +1,79 @@
+[
+  {
+    "IdMenu" : 1,
+    "Nama" : "Paket 1 krispi pedas manis",
+    "Harga" : 51500,
+    "Deskripsi" : "1 crispy chicken pedas manis + 1 Rice + 1 Medium Drink",
+    "Kategori" : "paket"
+  },
+  {
+    "IdMenu" : 2,
+    "Nama" : "Paket 2 krispi pedas manis",
+    "Harga" : 102800,
+    "Deskripsi" : "2 crispy chicken pedas manis + 1 Rice + 1 Lychee Tea Medium",
+    "Kategori" : "paket"
+  },
+  {
+    "IdMenu" : 3,
+    "Nama" : "Paket 1 whole pedas manis",
+    "Harga" : 102800,
+    "Deskripsi" : "1 whole crispy chicken pedas manis + 3 Rice + 3 Coke",
+    "Kategori" : "paket"
+  },
+  {
+    "IdMenu" : 4,
+    "Nama" : "Whole Signature Crispy Chicken",
+    "Harga" : 148500,
+    "Deskripsi" : "1 whole signature crispy chicken",
+    "Kategori" : "makanan"
+  },
+  {
+    "IdMenu" : 5,
+    "Nama" : "Poppin crispy chicken burger",
+    "Harga" : 32000,
+    "Deskripsi" : "1 Crispy chicken burger",
+    "Kategori" : "makanan"
+  },
+  {
+    "IdMenu" : 6,
+    "Nama" : "popin 2pcs crispy chicken",
+    "Harga" : 38000,
+    "Deskripsi" : "2 crispy chicken",
+    "Kategori" : "makanan"
+  },
+  {
+    "IdMenu" : 7,
+    "Nama" : "Signature crispy chicken sandwich",
+    "Harga" : 58500,
+    "Deskripsi" : "1 Signature crispy chicken sandwich",
+    "Kategori" : "makanan"
+  },
+  {
+    "IdMenu" : 8,
+    "Nama" : "Lychee Tea Medium",
+    "Harga" : 31000,
+    "Deskripsi" : "1 Lychee Tea Medium",
+    "Kategori" : "minuman"
+  },
+  {
+    "IdMenu" : 9,
+    "Nama" : "Mineral Water",
+    "Harga" : 16500,
+    "Deskripsi" : "1 Mineral Water",
+    "Kategori" : "minuman"
+  },
+  {
+    "IdMenu" : 10,
+    "Nama" : "Coke Medium",
+    "Harga" : 23500,
+    "Deskripsi" : "1 Coke Medium",
+    "Kategori" : "minuman"
+  },
+  {
+    "IdMenu" : 11,
+    "Nama" : "Jasmine Tea Medium",
+    "Harga" : 23500,
+    "Deskripsi" : "1 Jasmine Tea Medium",
+    "Kategori" : "minuman"
+  }
+]
