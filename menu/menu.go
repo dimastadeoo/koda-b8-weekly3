@@ -2,7 +2,6 @@ package menu
 
 import (
 	"encoding/json"
-	"log"
 	"os"
 	"strconv"
 )
@@ -18,13 +17,14 @@ type User struct {
 func ListMenu() []User {
 	file, err := os.ReadFile("menu.json")
 	if err != nil {
-		log.Fatal(err)
+		panic("Error Message: " + err.Error())
 	}
 	var ListMenu []User
 
 	err = json.Unmarshal(file, &ListMenu)
 	if err != nil {
-		log.Fatal(err)
+		panic("Error Message: " + err.Error())
+
 	}
 	return ListMenu
 }

@@ -45,6 +45,7 @@ choiceKategori:
 		fmt.Print("Pilih Nomor Menu / Ketik 0 untuk kembali ke awal: ")
 		fmt.Scanln(&choice)
 		if choice == "0" {
+			utils.CallClear()
 			goto choiceKategori
 		}
 		menuChoice = feature.DetailMenu(filMenu, choice)
