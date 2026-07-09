@@ -93,7 +93,7 @@ cartDisplay:
 			goto choiceKategori
 		}
 
-		totalPrice += feature.DisplayCart(carts)
+		totalPrice = feature.DisplayCart(carts)
 		fmt.Print("Ingin Pesan Lagi Y / N: ")
 		fmt.Scanln(&choice)
 
