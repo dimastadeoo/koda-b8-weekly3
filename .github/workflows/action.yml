@@ -1,0 +1,77 @@
+name: Automation build APP And Images Golang Pemesanan Menu Popeye
+run-name: ${{github.event.head_commit.message}}
+
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*'
+
+jobs:
+  rules-tag:
+    name: "check tag"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Validate SemVer standard
+        run: |
+            TAG_NAME=${GITHUB_REF#refs/tags/} 
+            SEMVER_REGEX="^v([0-9]+)\.([0-9]+)\.([0-9]+)(-[a-zA-Z0-9.-]+)?(\+[a-zA-Z0-9.-]+)?$"
+            
+            if [[ ! "$TAG_NAME" =~ $SEMVER_REGEX ]]; then 
+              echo "Error: Tag $TAG_NAME tidak sesuai dengan standar SemVer!" 
+              exit 1 
+            else 
+              echo "Tag $TAG_NAME valid menggunakan standar SemVer." 
+            fi
+
+  release-app:
+    name: "Release builded app Linux"
+    needs: rules-tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: get source
+        uses: actions/checkout@v6
+      - name: setup golang
+        uses: actions/setup-go@v6
+        with:
+          # Version or version range of Go to use
+          go-version-file: go.mod
+      - name: install go deps
+        run: go mod tidy
+      - name: build app linux
+        run: go build -o popeye-linux main.go
+      - name: build app windows
+        run: GOOS=windows GOARCH=amd64 go build -o popeye-windows.exe main.go
+      - name: build app Mac OS
+        run: GOOS=darwin GOARCH=arm64 go build -o popeye-darwin main.go
+      - name: Compress artifact Linux
+        run: zip -r Pesan-Menu-Popeye-Linux.zip ./popeye-linux
+      - name: Compress artifact Windows
+        run: zip -r Pesan-Menu-Popeye-Windows.zip ./popeye-windows.exe
+      - name: Compress artifact Mac OS
+        run: zip -r Pesan-Menu-Popeye-Mac.zip ./popeye-darwin
+      - name: Release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: |
+            Pesan-Menu-Popeye-Linux.zip
+            Pesan-Menu-Popeye-Windows.zip
+            Pesan-Menu-Popeye-Mac.zip
+  build-docker-image:
+    needs: rules-tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Login to DockerHub
+        run: echo -n ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build Docker image
+        run: docker build . -t ghcr.io/${{github.repository}}:latest
+
+      - name: Push to ghcr.io
+        run: docker push ghcr.io/${{github.repository}}:latest
