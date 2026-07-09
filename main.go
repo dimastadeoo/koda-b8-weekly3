@@ -113,7 +113,6 @@ cartDisplay:
 		fmt.Print("Input Pembayaran: ")
 		fmt.Scanln(&choice)
 		payment, err := strconv.Atoi(choice)
-		fmt.Println(totalPrice)
 
 		if err != nil {
 			fmt.Println("Error: Input tidak valid! Masukkan hanya angka")
@@ -124,6 +123,22 @@ cartDisplay:
 		}
 
 		carts = feature.Payment(payment, totalPrice, carts)
+
+		for {
+			fmt.Print("Ingin Memulai Pesanan Lagi Y / N: ")
+			fmt.Scanln(&choice)
+
+			if choice == "Y" || choice == "y" {
+				utils.CallClear()
+				goto choiceKategori
+			} else if choice == "N" || choice == "n" {
+				break
+			} else {
+				fmt.Println("Input Salah, Pilih Y atau N")
+				continue
+			}
+		}
+		
 		break
 	}
 
