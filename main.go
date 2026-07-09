@@ -17,12 +17,30 @@ var welcMess = func(){
 }
 
 func main() {
-	welcMess()
+	
 	var choice string
-	fmt.Print("Pilih angka (1-5): ")
-	fmt.Scanln(&choice)
+	filMenu := []menu.User{}
 
-	feature.FilterMenu(menu.ListMenu(), choice)
+	for  {
+		welcMess()
+		fmt.Print("Pilih angka (1-5): ")
+		fmt.Scanln(&choice)
+	
+		filMenu = feature.FilterMenu(menu.ListMenu(), choice)
+		if (filMenu != nil){
+			break
+		}
+	}
+
+	menuChoice := menu.User{}
+	for	{
+		fmt.Print("Pilih Menu: ")
+		fmt.Scanln(&choice)
+		menuChoice = feature.DetailMenu(filMenu, choice)
+		if (menuChoice != menu.User{}){
+			break
+		}
+	}
 
 
 }
