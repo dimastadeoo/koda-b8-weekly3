@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"project-golang/menu"
+	"project-golang/utils"
 )
 
 func FilterMenu(dataMenu []menu.User, category string) []menu.User {
@@ -20,6 +21,7 @@ func FilterMenu(dataMenu []menu.User, category string) []menu.User {
 		filMenu = menu.FilterMenu(dataMenu, "minuman")
 		fmt.Println("---------------------Menu Minuman-----------------------------")
 	case "4":
+		utils.CallClear()
 		fmt.Println("Masuk Ke Cart...")
 		return nil
 	case "5":

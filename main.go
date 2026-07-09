@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"project-golang/feature"
 	"project-golang/menu"
+	"project-golang/utils"
 	"strconv"
 )
 
@@ -19,6 +20,7 @@ var welcMess = func() {
 }
 
 func main() {
+	utils.CallClear()
 	totalHarga := 0
 	var carts []feature.Cart
 	var choice string
@@ -31,10 +33,10 @@ choiceKategori:
 		fmt.Scanln(&choice)
 
 		filMenu = feature.FilterMenu(menu.ListMenu(), choice)
-		if filMenu != nil {
-			if choice == "4" {
+		if choice == "4" {
 				goto cartDisplay
-			}
+		}
+		if filMenu != nil {
 			break
 		}
 	}
@@ -68,6 +70,7 @@ inputQty:
 				fmt.Scanln(&choice)
 
 				if choice == "Y" || choice == "y" {
+					utils.CallClear()
 					goto choiceKategori
 				} else if choice == "N" || choice == "n" {
 					break inputQty
@@ -80,9 +83,12 @@ inputQty:
 		}
 
 	}
+	utils.CallClear()
+
 cartDisplay:
 	for {
 		if len(carts) == 0 {
+			fmt.Println("Keranjang Masih Kosong Silahkan Pesan dulu")
 			goto choiceKategori
 		}
 
@@ -91,7 +97,7 @@ cartDisplay:
 		fmt.Scanln(&choice)
 
 		if choice == "Y" || choice == "y" {
-			fmt.Println("Keranjang Masih Kosong Silahkan Pesan dulu")
+			utils.CallClear()
 			goto choiceKategori
 		} else if choice == "N" || choice == "n" {
 			break
