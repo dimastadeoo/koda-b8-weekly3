@@ -6,21 +6,19 @@ import (
 	"project-golang/menu"
 )
 
-
-
 func FilterMenu(dataMenu []menu.User, category string) []menu.User{
 	var filMenu []menu.User
 	
 	switch category {
 	case "1":
 		filMenu = menu.FilterMenu(dataMenu, "paket")
-		fmt.Println("---------------------Menu Paket--------------------------")
+		fmt.Println("---------------------Menu Paket-------------------------------")
 	case "2":
 		filMenu = menu.FilterMenu(dataMenu, "makanan")
-		fmt.Println("---------------------Menu Makanan--------------------------")
+		fmt.Println("---------------------Menu Makanan-----------------------------")
 	case "3":
 		filMenu = menu.FilterMenu(dataMenu, "minuman")
-		fmt.Println("---------------------Menu Minuman--------------------------")
+		fmt.Println("---------------------Menu Minuman-----------------------------")
 	case "4":
 		fmt.Println("Kembali ke menu utama...")
     	return nil
