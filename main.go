@@ -19,11 +19,12 @@ var welcMess = func() {
 }
 
 func main() {
+	totalHarga := 0
 	var carts []feature.Cart
-
 	var choice string
 	filMenu := []menu.User{}
-	choiceKategori:
+	menuChoice := menu.User{}
+choiceKategori:
 	for {
 		welcMess()
 		fmt.Print("Pilih angka (1-5): ")
@@ -31,12 +32,13 @@ func main() {
 
 		filMenu = feature.FilterMenu(menu.ListMenu(), choice)
 		if filMenu != nil {
+			if choice == "4" {
+				goto cartDisplay
+			}
 			break
 		}
 	}
 
-	menuChoice := menu.User{}
-	// choiceDetail:
 	for {
 		fmt.Print("Pilih Nomor Menu / Ketik 0 untuk kembali ke awal: ")
 		fmt.Scanln(&choice)
@@ -49,6 +51,7 @@ func main() {
 		}
 	}
 
+inputQty:
 	for {
 		fmt.Print("Input Jumlah Pesanan: ")
 		fmt.Scanln(&choice)
@@ -57,9 +60,44 @@ func main() {
 			fmt.Println("Error: Input tidak valid! Masukkan Jumlah berupa angka saja.")
 			continue
 		}
-		carts = feature.CartProcess(menuChoice, qty)
+		carts = feature.CartProcess(menuChoice, qty, carts)
 		if carts != nil {
+
+			for {
+				fmt.Print("Ingin Pesan Lagi Y / N: ")
+				fmt.Scanln(&choice)
+
+				if choice == "Y" || choice == "y" {
+					goto choiceKategori
+				} else if choice == "N" || choice == "n" {
+					break inputQty
+				} else {
+					fmt.Println("Input Salah, Pilih Y atau N")
+					continue
+				}
+			}
+
+		}
+
+	}
+cartDisplay:
+	for {
+		if len(carts) == 0 {
+			goto choiceKategori
+		}
+
+		totalHarga += feature.DisplayCart(carts)
+		fmt.Print("Ingin Pesan Lagi Y / N: ")
+		fmt.Scanln(&choice)
+
+		if choice == "Y" || choice == "y" {
+			fmt.Println("Keranjang Masih Kosong Silahkan Pesan dulu")
+			goto choiceKategori
+		} else if choice == "N" || choice == "n" {
 			break
+		} else {
+			fmt.Println("Input Salah, Pilih Y atau N")
+			continue
 		}
 
 	}
