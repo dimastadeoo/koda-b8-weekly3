@@ -6,9 +6,9 @@ import (
 	"project-golang/menu"
 )
 
-func FilterMenu(dataMenu []menu.User, category string) []menu.User{
+func FilterMenu(dataMenu []menu.User, category string) []menu.User {
 	var filMenu []menu.User
-	
+
 	switch category {
 	case "1":
 		filMenu = menu.FilterMenu(dataMenu, "paket")
@@ -21,16 +21,16 @@ func FilterMenu(dataMenu []menu.User, category string) []menu.User{
 		fmt.Println("---------------------Menu Minuman-----------------------------")
 	case "4":
 		fmt.Println("Kembali ke menu utama...")
-    	return nil
+		return nil
 	case "5":
 		os.Exit(1)
 	default:
 		fmt.Println("Pilihan tidak valid!")
-    	return nil
+		return nil
 	}
 
 	for _, m := range filMenu {
-    	fmt.Printf("No. %d %s - (Rp%d)\n", m.IdMenu, m.Name, m.Price)
+		fmt.Printf("No. %d %s - (%s)\n", m.IdMenu, m.Name, FormatRupiah(m.Price))
 	}
 
 	return filMenu
