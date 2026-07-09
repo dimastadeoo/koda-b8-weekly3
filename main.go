@@ -21,7 +21,7 @@ var welcMess = func() {
 
 func main() {
 	utils.CallClear()
-	totalHarga := 0
+	totalPrice := 0
 	var carts []feature.Cart
 	var choice string
 	filMenu := []menu.User{}
@@ -93,7 +93,7 @@ cartDisplay:
 			goto choiceKategori
 		}
 
-		totalHarga += feature.DisplayCart(carts)
+		totalPrice += feature.DisplayCart(carts)
 		fmt.Print("Ingin Pesan Lagi Y / N: ")
 		fmt.Scanln(&choice)
 
@@ -107,6 +107,24 @@ cartDisplay:
 			continue
 		}
 
+	}
+
+	for {
+		fmt.Print("Input Pembayaran: ")
+		fmt.Scanln(&choice)
+		payment, err := strconv.Atoi(choice)
+		fmt.Println(totalPrice)
+
+		if err != nil {
+			fmt.Println("Error: Input tidak valid! Masukkan hanya angka")
+			continue
+		}else if payment < totalPrice {
+			fmt.Println("Error: Pembayaran Kurang! Input Pembayaran harus lebih dari sama dengan Total Pembayaran")
+			continue
+		}
+
+		carts = feature.Payment(payment, totalPrice, carts)
+		break
 	}
 
 }
