@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"strconv"
 )
 
 type User struct {
@@ -14,18 +15,14 @@ type User struct {
 	Category  string `json:"kategori"`
 }
 
-
 func ListMenu() []User{
-	file, err := os.Open("menu.json")
+	file, err := os.ReadFile("menu.json")
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer file.Close()
-
 	var ListMenu []User
-
-	// Gunakan decoder langsung dari file
-	err = json.NewDecoder(file).Decode(&ListMenu)
+	
+	err = json.Unmarshal(file, &ListMenu)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -37,7 +34,9 @@ func FilterMenu(items []User, targetCategory string) []User {
     for _, item := range items {
         if item.Category == targetCategory {
             result = append(result, item)
-        }
+        }else if id, _:= strconv.Atoi(targetCategory); item.IdMenu == id{
+            result = append(result, item)
+		}
     }
     return result
 }
