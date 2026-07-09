@@ -20,7 +20,7 @@ func FilterMenu(dataMenu []menu.User, category string) []menu.User {
 		filMenu = menu.FilterMenu(dataMenu, "minuman")
 		fmt.Println("---------------------Menu Minuman-----------------------------")
 	case "4":
-		fmt.Println("Kembali ke menu utama...")
+		fmt.Println("Masuk Ke Cart...")
 		return nil
 	case "5":
 		os.Exit(1)
