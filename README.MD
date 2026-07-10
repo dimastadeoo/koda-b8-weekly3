@@ -77,8 +77,8 @@ git push origin v1.0.0
 ## 🐳 Jalankan dengan docker image
 Jika anda ingin langsung menjalankan aplikasi dengan container, bisa gunakan docker untuk menjalankan aplikasi, pastikan sudah install docker di peranhgkat anda
 ```bash
-docker pull ghcr.io/username/popeye-cli:latest
-docker run -it ghcr.io/username/popeye-cli:latest
+docker pull ghcr.io/dimastadeoo/koda-b8-weekly3:latest
+docker run -it ghcr.io/dimastadeoo/koda-b8-weekly3:latest
 ```
 
 ## 🧮 Screenshot Aplikasi dan Hasil Struk
