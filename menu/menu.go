@@ -2,7 +2,6 @@ package menu
 
 import (
 	"encoding/json"
-	"os"
 	"strconv"
 )
 
@@ -14,14 +13,16 @@ type User struct {
 	Category    string `json:"kategori"`
 }
 
-func ListMenu() []User {
-	file, err := os.ReadFile("menu.json")
-	if err != nil {
-		panic("Error Message: " + err.Error())
-	}
+
+
+func ListMenu(jsonMenu []byte) []User {
+	// file, err := os.ReadFile("menu.json")
+	// if err != nil {
+	// 	panic("Error Message: " + err.Error())
+	// }
 	var ListMenu []User
 
-	err = json.Unmarshal(file, &ListMenu)
+	err := json.Unmarshal(jsonMenu, &ListMenu)
 	if err != nil {
 		panic("Error Message: " + err.Error())
 

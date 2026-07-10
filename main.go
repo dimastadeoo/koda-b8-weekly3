@@ -1,12 +1,16 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 	"project-golang/feature"
 	"project-golang/menu"
 	"project-golang/utils"
 	"strconv"
 )
+
+//go:embed menu.json 
+var jsonMenu []byte
 
 var welcMess = func() {
 	fmt.Println(`--------------------Selamat Datang di POPEYE------------------`)
@@ -26,13 +30,15 @@ func main() {
 	var choice string
 	filMenu := []menu.User{}
 	menuChoice := menu.User{}
+
+
 choiceKategori:
 	for {
 		welcMess()
 		fmt.Print("Pilih angka (1-5): ")
 		fmt.Scanln(&choice)
 
-		filMenu = feature.FilterMenu(menu.ListMenu(), choice)
+		filMenu = feature.FilterMenu(menu.ListMenu(jsonMenu), choice)
 		if choice == "4" {
 				goto cartDisplay
 		}
