@@ -46,7 +46,7 @@ choiceKategori:
 			break
 		}
 	}
-
+inputMenu:
 	for {
 		fmt.Print("Pilih Nomor Menu / Ketik 0 untuk kembali ke awal: ")
 		fmt.Scanln(&choice)
@@ -62,13 +62,17 @@ choiceKategori:
 
 inputQty:
 	for {
-		fmt.Print("Input Jumlah Pesanan: ")
+		fmt.Print("Input Jumlah Pesanan / input 0 untuk kembali ke menu sebelumnya: ")
 		fmt.Scanln(&choice)
 		qty, err := strconv.Atoi(choice)
 		if err != nil {
-			fmt.Println("Error: Input tidak valid! Masukkan Jumlah berupa angka saja.")
+			fmt.Printf("Error: %s\n", err.Error())
 			continue
+		} else if qty == 0 {
+			fmt.Println("Silahkan pilih Nomor Menu kembali")
+			goto inputMenu
 		}
+
 		carts = feature.CartProcess(menuChoice, qty, carts)
 		if carts != nil {
 

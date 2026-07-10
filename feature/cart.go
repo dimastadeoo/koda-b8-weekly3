@@ -17,10 +17,6 @@ func (c Cart) Subtotal() int{
 } 
 
 func CartProcess(menu menu.User, qty int, carts []Cart) []Cart{
-	if qty == 0 {
-		fmt.Println("Input Jumlah Minimal 1")
-		return nil
-	}
 
 	for _, i := range carts{
 		if i.Menu.IdMenu == menu.IdMenu{
