@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"fmt"
 	"log"
+	"os"
 	"project-golang/auth"
 	"project-golang/feature"
 	"project-golang/menu"
@@ -30,7 +31,6 @@ func main() {
 	utils.CallClear()
 	totalPrice := 0
 	var carts []feature.Cart
-	var choice string
 	filMenu := []menu.User{}
 	menuChoice := menu.User{}
 
@@ -47,26 +47,43 @@ func main() {
 	// Cek apakah sudah ada admin, jika belum buat admin default
 	adminExists := false
 	users, _ := service.ListUsers()
-	for _, u := range users {
-		if u.Role == "admin" {
+	for _, user := range users {
+		if user.Role == "admin" {
 			adminExists = true
 			break
 		}
 	}
 	if !adminExists {
 		fmt.Println("Belum ada admin. Silakan buat admin awal.")
+		var fullname, username, password, confirm  string
 		// Minta input admin pertama
-		fullname := utils.ReadString("Nama Lengkap Admin: ")
-		username := utils.ReadString("Username Admin: ")
-		password := utils.ReadString("Password Admin: ")
-		confirm := utils.ReadString("Konfirmasi Password: ")
+		for {
+			fullname = utils.ReadString("Nama Lengkap Admin: ")
+			username = utils.ReadString("Username Admin: ")
+			password = utils.ReadString("Password Admin: ")
+			confirm = utils.ReadString("Konfirmasi Password: ")
+			if fullname == "" || username == "" || password == "" || confirm == ""{
+				fmt.Println("Data pendaftaran tidak boleh ada kosong")
+				utils.PressEnter("Tekan enter untuk lanjut")
+				utils.CallClear()
+				continue
+			}else if confirm != password {
+				fmt.Println("confirm password tidak sama dengan password")
+				utils.PressEnter("Tekan enter untuk lanjut")
+				continue
+			}else {
+				break	
+			}
+		}
 		err := service.Register(fullname, username, password, confirm, "admin")
 		if err != nil {
 			log.Fatal("Gagal membuat admin:", err)
 		}
 		fmt.Println("Admin berhasil dibuat! Silakan login.")
 		utils.PressEnter("Tekan enter untuk lanjut")
+		utils.CallClear()
 	}
+
 authentikasi:
 	for {
 		utils.CallClear()
@@ -78,61 +95,24 @@ authentikasi:
 
 		switch choice {
 		case "1":
-			username := utils.ReadString("Username: ")
-			password := utils.ReadString("Password: ")
-			user, err := service.Login(username, password)
-			if err != nil {
-				fmt.Println("Login gagal:", err)
-				utils.PressEnter("Tekan Enter untuk lanjut")
-				continue
-			}
-			if user.Role != "admin" {
-				fmt.Println("Akses ditolak. Bukan admin.")
-				utils.PressEnter("Tekan Enter untuk lanjut")
-
-				continue
-			}
-			fmt.Printf("Selamat datang Admin %s!\n", user.Fullname)
-			utils.PressEnter("Tekan Enter untuk lanjut")
-			auth.AdminMenu(service, user)
-
+			feature.AdminLogin(service)
 		case "2":
-			username := utils.ReadString("Username: ")
-			password := utils.ReadString("Password: ")
-			user, err := service.Login(username, password)
-			if err != nil {
-				fmt.Println("Login gagal:", err)
-				utils.PressEnter("Tekan Enter untuk lanjut")
-				continue
-			}
-			if user.Role != "kasir" {
-				fmt.Println("Akses ditolak. Bukan kasir.")
-				utils.PressEnter("Tekan Enter untuk lanjut")
-				continue
-			}
-			fmt.Printf("Selamat datang Kasir %s!\n", user.Fullname)
-			utils.PressEnter("Tekan Enter untuk lanjut")
-			// Langsung ke menu pemesanan (ganti dengan fungsi Anda)
+			feature.KasirLogin(service)
 			break authentikasi
-			// Setelah selesai, kembali ke login
-
 		case "3":
 			fmt.Println("Terima kasih, sampai jumpa!")
-			return
-
+			os.Exit(1)
 		default:
 			fmt.Println("Pilih 1-3")
 			utils.PressEnter("Tekan Enter untuk lanjut")
 		}
-	
 	}
 
 
 choiceKategori:
 	for {
 		welcMess()
-		fmt.Print("Pilih angka (1-5): ")
-		fmt.Scanln(&choice)
+		choice := utils.ReadString("Pilih angka (1-5): ")
 
 		filMenu = feature.FilterMenu(menu.ListMenu(jsonMenu), choice)
 		if choice == "4" {
@@ -144,8 +124,7 @@ choiceKategori:
 	}
 inputMenu:
 	for {
-		fmt.Print("Pilih Nomor Menu / Ketik 0 untuk kembali ke awal: ")
-		fmt.Scanln(&choice)
+		choice := utils.ReadString("Pilih Nomor Menu / Ketik 0 untuk kembali ke awal: ")
 		if choice == "0" {
 			utils.CallClear()
 			goto choiceKategori
@@ -158,8 +137,8 @@ inputMenu:
 
 inputQty:
 	for {
-		fmt.Print("Input Jumlah Pesanan / input 0 untuk kembali ke menu sebelumnya: ")
-		fmt.Scanln(&choice)
+		choice := utils.ReadString("Input Jumlah Pesanan / input 0 untuk kembali ke menu sebelumnya: ")
+
 		qty, err := strconv.Atoi(choice)
 		if err != nil {
 			fmt.Printf("Error: %s\n", err.Error())
@@ -173,8 +152,7 @@ inputQty:
 		if carts != nil {
 
 			for {
-				fmt.Print("Ingin Pesan Lagi Y / N: ")
-				fmt.Scanln(&choice)
+				choice = utils.ReadString("Ingin Pesan Lagi Y / N: ")
 
 				if choice == "Y" || choice == "y" {
 					utils.CallClear()
@@ -200,8 +178,7 @@ cartDisplay:
 		}
 
 		totalPrice = feature.DisplayCart(carts)
-		fmt.Print("Ingin Pesan Lagi Y / N: ")
-		fmt.Scanln(&choice)
+		choice := utils.ReadString("Ingin Pesan Lagi Y / N: ")
 
 		if choice == "Y" || choice == "y" {
 			utils.CallClear()
@@ -216,8 +193,8 @@ cartDisplay:
 	}
 
 	for {
-		fmt.Print("Input Pembayaran: ")
-		fmt.Scanln(&choice)
+		choice := utils.ReadString("Input Pembayaran: ")
+
 		payment, err := strconv.Atoi(choice)
 
 		if err != nil {
@@ -231,8 +208,7 @@ cartDisplay:
 		carts = feature.Payment(payment, totalPrice, carts)
 
 		for {
-			fmt.Print("Ingin Memulai Pesanan Lagi Y / N: ")
-			fmt.Scanln(&choice)
+			choice := utils.ReadString("Ingin Memulai Pesanan Lagi Y / N: ")
 
 			if choice == "Y" || choice == "y" {
 				utils.CallClear()
