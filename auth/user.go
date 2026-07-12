@@ -158,49 +158,50 @@ func (s *AuthService) ChangePasswd(username, oldPass, newPass, confirm string) e
 	fmt.Printf("Password %s berhasil diubah\n", user.Fullname)
 	return nil
 }
+
 // UpdateUserProfile mengubah fullname dan/atau role (hanya admin)
 func (s *AuthService) UpdateUserProfile(username, newFullname, newRole string) error {
-    user, err := s.repo.FindByUsername(username)
-    if err != nil {
-        return err
-    }
-    if newFullname != "" {
-        user.Fullname = newFullname
-    }
-    if newRole != "" {
-        if newRole != "admin" && newRole != "kasir" {
-            return errors.New("role harus 'admin' atau 'kasir'")
-        }
-        user.Role = newRole
-    }
-    return s.repo.Update(user)
+	user, err := s.repo.FindByUsername(username)
+	if err != nil {
+		return err
+	}
+	if newFullname != "" {
+		user.Fullname = newFullname
+	}
+	if newRole != "" {
+		if newRole != "admin" && newRole != "kasir" {
+			return errors.New("role harus 'admin' atau 'kasir'")
+		}
+		user.Role = newRole
+	}
+	return s.repo.Update(user)
 }
 
 // ResetPassword mereset password user tanpa perlu password lama (hanya admin)
 func (s *AuthService) ResetPassword(username, newPass string) error {
-    user, err := s.repo.FindByUsername(username)
-    if err != nil {
-        return err
-    }
-    user.Password = hashPasswd(newPass)
-    return s.repo.Update(user)
+	user, err := s.repo.FindByUsername(username)
+	if err != nil {
+		return err
+	}
+	user.Password = hashPasswd(newPass)
+	return s.repo.Update(user)
 }
 
 // SearchUsers mencari user berdasarkan username atau fullname (case-insensitive)
 func (s *AuthService) SearchUsers(keyword string) ([]*Users, error) {
-    all, err := s.repo.FindAll()
-    if err != nil {
-        return nil, err
-    }
-    var result []*Users
-    keywordLower := strings.ToLower(keyword)
-    for _, u := range all {
-        if strings.Contains(strings.ToLower(u.Username), keywordLower) ||
-            strings.Contains(strings.ToLower(u.Fullname), keywordLower) {
-            result = append(result, u)
-        }
-    }
-    return result, nil
+	all, err := s.repo.FindAll()
+	if err != nil {
+		return nil, err
+	}
+	var result []*Users
+	keywordLower := strings.ToLower(keyword)
+	for _, u := range all {
+		if strings.Contains(strings.ToLower(u.Username), keywordLower) ||
+			strings.Contains(strings.ToLower(u.Fullname), keywordLower) {
+			result = append(result, u)
+		}
+	}
+	return result, nil
 }
 
 // (Opsional) Hapus user – hanya untuk admin
