@@ -128,10 +128,10 @@ func (s *AuthService) Register(fullname, username, password, confirm, role strin
 func (s *AuthService) Login(username, password string) (*Users, error) {
 	user, err := s.repo.FindByUsername(username)
 	if err != nil {
-		return nil, errors.New("username atau password salah")
+		return nil, errors.New("username tidak ditemukan")
 	}
 	if user.Password != hashPasswd(password) {
-		return nil, errors.New("username atau password salah")
+		return nil, errors.New("password salah")
 	}
 	fmt.Printf("Selamat datang %s! (role: %s)\n", user.Fullname, user.Role)
 	return user, nil
