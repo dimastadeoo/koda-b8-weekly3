@@ -21,20 +21,19 @@ var welcMess = func() {
 	1. Paket Makan
 	2. Makanan
 	3. Minuman
-	4. Lihat Keranjang
-	5. Keluar`)
+	4. Cari Menu
+	5. Lihat Keranjang`)
 	fmt.Println(`--------------------------------------------------------------`)
 }
-
 
 func main() {
 	utils.CallClear()
 	totalPrice := 0
 	var carts []feature.Cart
-	filMenu := []menu.User{}
-	menuChoice := menu.User{}
+	filMenu := []menu.Menu{}
+	menuChoice := menu.Menu{}
 
-	defer func (){
+	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("Error: ", r)
 		}
@@ -55,24 +54,24 @@ func main() {
 	}
 	if !adminExists {
 		fmt.Println("Belum ada admin. Silakan buat admin awal.")
-		var fullname, username, password, confirm  string
+		var fullname, username, password, confirm string
 		// Minta input admin pertama
 		for {
 			fullname = utils.ReadString("Nama Lengkap Admin: ")
 			username = utils.ReadString("Username Admin: ")
 			password = utils.ReadString("Password Admin: ")
 			confirm = utils.ReadString("Konfirmasi Password: ")
-			if fullname == "" || username == "" || password == "" || confirm == ""{
+			if fullname == "" || username == "" || password == "" || confirm == "" {
 				fmt.Println("Data pendaftaran tidak boleh ada kosong")
 				utils.PressEnter("Tekan enter untuk lanjut")
 				utils.CallClear()
 				continue
-			}else if confirm != password {
+			} else if confirm != password {
 				fmt.Println("confirm password tidak sama dengan password")
 				utils.PressEnter("Tekan enter untuk lanjut")
 				continue
-			}else {
-				break	
+			} else {
+				break
 			}
 		}
 		err := service.Register(fullname, username, password, confirm, "admin")
@@ -108,15 +107,15 @@ authentikasi:
 		}
 	}
 
-
+	utils.CallClear()
 choiceKategori:
 	for {
 		welcMess()
 		choice := utils.ReadString("Pilih angka (1-5): ")
 
 		filMenu = feature.FilterMenu(menu.ListMenu(jsonMenu), choice)
-		if choice == "4" {
-				goto cartDisplay
+		if choice == "5" {
+			goto cartDisplay
 		}
 		if filMenu != nil {
 			break
@@ -130,7 +129,7 @@ inputMenu:
 			goto choiceKategori
 		}
 		menuChoice = feature.DetailMenu(filMenu, choice)
-		if (menuChoice != menu.User{}) {
+		if (menuChoice != menu.Menu{}) {
 			break
 		}
 	}
@@ -200,7 +199,7 @@ cartDisplay:
 		if err != nil {
 			fmt.Println("Error: Input tidak valid! Masukkan hanya angka")
 			continue
-		}else if payment < totalPrice {
+		} else if payment < totalPrice {
 			fmt.Println("Error: Pembayaran Kurang! Input Pembayaran harus lebih dari sama dengan Total Pembayaran")
 			continue
 		}
@@ -220,7 +219,7 @@ cartDisplay:
 				continue
 			}
 		}
-		
+
 		break
 	}
 
