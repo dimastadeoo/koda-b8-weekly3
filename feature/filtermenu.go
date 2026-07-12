@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"project-golang/menu"
 	"project-golang/utils"
-	"time"
 )
 
 func FilterMenu(dataMenu []menu.Menu, category string) []menu.Menu {
@@ -24,20 +23,23 @@ func FilterMenu(dataMenu []menu.Menu, category string) []menu.Menu {
 		filMenu = menu.FilterMenu(dataMenu, "minuman")
 		fmt.Println("---------------------Menu Minuman-----------------------------")
 	case "4":
-		utils.CallClear()
-		fmt.Println("--------------------------------------------------------------")
-		choice := utils.ReadString("Cari Menu berdasarkan Kategori atau nama menu: ")
-		filMenu = menu.FilterMenu(dataMenu, choice)
-		if len(filMenu) == 0{
-			fmt.Println("Hasil Pencarian Menu Tidak ada")
-			utils.PressEnter("Tekan Enter untuk ulangi lagi")
-			return nil
+		choice := ""
+		for {
+			utils.CallClear()
+			fmt.Println("--------------------------------------------------------------")
+			choice = utils.ReadString("Cari Menu berdasarkan Kategori atau nama menu: ")
+			filMenu = menu.FilterMenu(dataMenu, choice)
+			if len(filMenu) == 0{
+				fmt.Println("Hasil Pencarian Menu Tidak ada")
+				utils.PressEnter("Tekan Enter untuk ulangi lagi")
+				return nil
+			}else{
+				break
+			}
 		}
 		fmt.Printf("---------------------Pencarian (%s)-----------------------------\n", choice)
 	case "5":
 		utils.CallClear()
-		fmt.Println("Masuk Ke Cart...")
-		time.Sleep(2 * time.Second)
 		return nil
 	default:
 		utils.CallClear()
