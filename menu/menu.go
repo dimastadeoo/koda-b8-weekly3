@@ -18,13 +18,13 @@ type User struct {
 func ListMenu(jsonMenu []byte) []User {
 	// file, err := os.ReadFile("menu.json")
 	// if err != nil {
-	// 	panic("Error Message: " + err.Error())
+	// 	panic(err.Error())
 	// }
 	var ListMenu []User
 
 	err := json.Unmarshal(jsonMenu, &ListMenu)
 	if err != nil {
-		panic("Error Message: " + err.Error())
+		panic(err.Error())
 
 	}
 	return ListMenu
