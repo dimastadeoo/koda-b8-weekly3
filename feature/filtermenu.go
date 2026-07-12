@@ -2,14 +2,13 @@ package feature
 
 import (
 	"fmt"
-	"os"
 	"project-golang/menu"
 	"project-golang/utils"
 	"time"
 )
 
-func FilterMenu(dataMenu []menu.User, category string) []menu.User {
-	var filMenu []menu.User
+func FilterMenu(dataMenu []menu.Menu, category string) []menu.Menu {
+	var filMenu []menu.Menu
 
 	switch category {
 	case "1":
@@ -26,11 +25,20 @@ func FilterMenu(dataMenu []menu.User, category string) []menu.User {
 		fmt.Println("---------------------Menu Minuman-----------------------------")
 	case "4":
 		utils.CallClear()
-		fmt.Println("Masuk Ke Cart...")
-		time.Sleep(2*time.Second)
-		return nil
+		fmt.Println("--------------------------------------------------------------")
+		choice := utils.ReadString("Cari Menu berdasarkan Kategori atau nama menu: ")
+		filMenu = menu.FilterMenu(dataMenu, choice)
+		if len(filMenu) == 0{
+			fmt.Println("Hasil Pencarian Menu Tidak ada")
+			utils.PressEnter("Tekan Enter untuk ulangi lagi")
+			return nil
+		}
+		fmt.Printf("---------------------Pencarian (%s)-----------------------------\n", choice)
 	case "5":
-		os.Exit(1)
+		utils.CallClear()
+		fmt.Println("Masuk Ke Cart...")
+		time.Sleep(2 * time.Second)
+		return nil
 	default:
 		utils.CallClear()
 		fmt.Println("Pilihan tidak valid!")
