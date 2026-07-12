@@ -7,19 +7,19 @@ import (
 
 type Cart struct {
 	IdCart int
-	Menu menu.User
-	Qty int
+	Menu   menu.Menu
+	Qty    int
 }
 
-func (c Cart) Subtotal() int{
+func (c Cart) Subtotal() int {
 	return c.Qty * c.Menu.Price
 
-} 
+}
 
-func CartProcess(menu menu.User, qty int, carts []Cart) []Cart{
+func CartProcess(menu menu.Menu, qty int, carts []Cart) []Cart {
 
-	for _, i := range carts{
-		if i.Menu.IdMenu == menu.IdMenu{
+	for _, i := range carts {
+		if i.Menu.IdMenu == menu.IdMenu {
 			i.Qty += qty
 			return carts
 		}
@@ -32,20 +32,20 @@ func CartProcess(menu menu.User, qty int, carts []Cart) []Cart{
 
 	carts = append(carts, Cart{
 		IdCart: idCart,
-		Menu: menu,
-		Qty: qty,
+		Menu:   menu,
+		Qty:    qty,
 	})
 
 	return carts
 }
 
-func DisplayCart(Carts []Cart) int{
+func DisplayCart(Carts []Cart) int {
 	totalHarga := 0
 
 	fmt.Println(`--------------------------------------------------------------`)
 	fmt.Println("---------------------Keranjang--------------------------------")
-	
-	for i, dataCart := range Carts{
+
+	for i, dataCart := range Carts {
 		fmt.Printf("%d. %s\n", i+1, dataCart.Menu.Name)
 		fmt.Printf("%dx @ %s\n", dataCart.Qty, FormatRupiah(dataCart.Menu.Price))
 		fmt.Printf("Subtotal: %s\n", FormatRupiah(dataCart.Subtotal()))

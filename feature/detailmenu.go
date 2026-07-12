@@ -5,11 +5,11 @@ import (
 	"project-golang/menu"
 )
 
-func DetailMenu(filMenu []menu.User, choice string) menu.User {
+func DetailMenu(filMenu []menu.Menu, choice string) menu.Menu {
 	menuChoice := menu.FilterMenu(filMenu, choice)
 	if menuChoice == nil {
 		fmt.Println("Menu tidak ada, Silahkan Pilih lagi!")
-		return menu.User{}
+		return menu.Menu{}
 	}
 
 	fmt.Println(`--------------------------------------------------------------`)

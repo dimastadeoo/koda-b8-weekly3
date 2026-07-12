@@ -3,9 +3,10 @@ package menu
 import (
 	"encoding/json"
 	"strconv"
+	"strings"
 )
 
-type User struct {
+type Menu struct {
 	IdMenu      int    `json:"idmenu"`
 	Name        string `json:"nama"`
 	Price       int    `json:"harga"`
@@ -13,14 +14,12 @@ type User struct {
 	Category    string `json:"kategori"`
 }
 
-
-
-func ListMenu(jsonMenu []byte) []User {
+func ListMenu(jsonMenu []byte) []Menu {
 	// file, err := os.ReadFile("menu.json")
 	// if err != nil {
 	// 	panic(err.Error())
 	// }
-	var ListMenu []User
+	var ListMenu []Menu
 
 	err := json.Unmarshal(jsonMenu, &ListMenu)
 	if err != nil {
@@ -30,12 +29,15 @@ func ListMenu(jsonMenu []byte) []User {
 	return ListMenu
 }
 
-func FilterMenu(items []User, targetCategory string) []User {
-	var result []User
+func FilterMenu(items []Menu, target string) []Menu {
+	var result []Menu
 	for _, item := range items {
-		if item.Category == targetCategory {
+		if item.Category == target {
 			result = append(result, item)
-		} else if id, _ := strconv.Atoi(targetCategory); item.IdMenu == id {
+		} else if id, _ := strconv.Atoi(target); item.IdMenu == id {
+			result = append(result, item)
+		} else if strings.Contains(strings.ToLower(item.Name), target) {
+
 			result = append(result, item)
 		}
 	}
