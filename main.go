@@ -3,13 +3,15 @@ package main
 import (
 	_ "embed"
 	"fmt"
+	"log"
+	"project-golang/auth"
 	"project-golang/feature"
 	"project-golang/menu"
 	"project-golang/utils"
 	"strconv"
 )
 
-//go:embed menu.json 
+//go:embed menu.json
 var jsonMenu []byte
 
 var welcMess = func() {
@@ -23,6 +25,7 @@ var welcMess = func() {
 	fmt.Println(`--------------------------------------------------------------`)
 }
 
+
 func main() {
 	utils.CallClear()
 	totalPrice := 0
@@ -30,6 +33,99 @@ func main() {
 	var choice string
 	filMenu := []menu.User{}
 	menuChoice := menu.User{}
+
+	defer func (){
+		if r := recover(); r != nil {
+			fmt.Println("Error: ", r)
+		}
+	}()
+
+	// Inisialisasi repository dan service
+	repo := auth.NewDataUser()
+	service := auth.NewAuthService(repo)
+
+	// Cek apakah sudah ada admin, jika belum buat admin default
+	adminExists := false
+	users, _ := service.ListUsers()
+	for _, u := range users {
+		if u.Role == "admin" {
+			adminExists = true
+			break
+		}
+	}
+	if !adminExists {
+		fmt.Println("Belum ada admin. Silakan buat admin awal.")
+		// Minta input admin pertama
+		fullname := utils.ReadString("Nama Lengkap Admin: ")
+		username := utils.ReadString("Username Admin: ")
+		password := utils.ReadString("Password Admin: ")
+		confirm := utils.ReadString("Konfirmasi Password: ")
+		err := service.Register(fullname, username, password, confirm, "admin")
+		if err != nil {
+			log.Fatal("Gagal membuat admin:", err)
+		}
+		fmt.Println("Admin berhasil dibuat! Silakan login.")
+		utils.PressEnter("Tekan enter untuk lanjut")
+	}
+authentikasi:
+	for {
+		utils.CallClear()
+		fmt.Println("========= SISTEM LOGIN =========")
+		fmt.Println("1. Login sebagai Admin")
+		fmt.Println("2. Login sebagai Kasir")
+		fmt.Println("3. Keluar")
+		choice := utils.ReadString("Pilih: ")
+
+		switch choice {
+		case "1":
+			username := utils.ReadString("Username: ")
+			password := utils.ReadString("Password: ")
+			user, err := service.Login(username, password)
+			if err != nil {
+				fmt.Println("Login gagal:", err)
+				utils.PressEnter("Tekan Enter untuk lanjut")
+				continue
+			}
+			if user.Role != "admin" {
+				fmt.Println("Akses ditolak. Bukan admin.")
+				utils.PressEnter("Tekan Enter untuk lanjut")
+
+				continue
+			}
+			fmt.Printf("Selamat datang Admin %s!\n", user.Fullname)
+			utils.PressEnter("Tekan Enter untuk lanjut")
+			auth.AdminMenu(service, user)
+
+		case "2":
+			username := utils.ReadString("Username: ")
+			password := utils.ReadString("Password: ")
+			user, err := service.Login(username, password)
+			if err != nil {
+				fmt.Println("Login gagal:", err)
+				utils.PressEnter("Tekan Enter untuk lanjut")
+				continue
+			}
+			if user.Role != "kasir" {
+				fmt.Println("Akses ditolak. Bukan kasir.")
+				utils.PressEnter("Tekan Enter untuk lanjut")
+				continue
+			}
+			fmt.Printf("Selamat datang Kasir %s!\n", user.Fullname)
+			utils.PressEnter("Tekan Enter untuk lanjut")
+			// Langsung ke menu pemesanan (ganti dengan fungsi Anda)
+			break authentikasi
+			// Setelah selesai, kembali ke login
+
+		case "3":
+			fmt.Println("Terima kasih, sampai jumpa!")
+			return
+
+		default:
+			fmt.Println("Pilih 1-3")
+			utils.PressEnter("Tekan Enter untuk lanjut")
+		}
+	
+	}
 
 
 choiceKategori:
