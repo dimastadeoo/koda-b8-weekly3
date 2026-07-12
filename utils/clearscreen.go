@@ -1,7 +1,7 @@
 package utils
 
-
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"runtime"
@@ -31,4 +31,9 @@ func CallClear() {
     } else { //unsupported platform
         panic("Your platform is unsupported! I can't clear terminal screen :(")
     }
+}
+
+func PressEnter(mss string){
+    fmt.Print(mss)
+    fmt.Scanln()
 }
