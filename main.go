@@ -10,6 +10,7 @@ import (
 	"project-golang/menu"
 	"project-golang/utils"
 	"strconv"
+	"time"
 )
 
 //go:embed menu.json
@@ -26,11 +27,25 @@ var welcMess = func() {
 	fmt.Println(`--------------------------------------------------------------`)
 }
 
+func loadMenuAsync() <-chan []menu.Menu {
+	ch := make(chan []menu.Menu, 1)
+	go func() {
+		// Simulasi proses parsing yang berat (misal dari file besar)
+		data := menu.ListMenu(jsonMenu)
+		ch <- data
+		close(ch)
+	}()
+
+	return ch
+}
+
 func main() {
 	utils.CallClear()
 	totalPrice := 0
 	var carts []feature.Cart
 	filMenu := []menu.Menu{}
+	dataChan := loadMenuAsync()
+	dataMenu := []menu.Menu{}
 	menuChoice := menu.Menu{}
 
 	defer func() {
@@ -108,12 +123,29 @@ authentikasi:
 	}
 
 	utils.CallClear()
+	spinner := []string{"|", "/", "-", "\\"}
+	i := 0
+
+	for {
+		// Cek apakah ada data di buffer
+		if len(dataChan) > 0 {
+			dataMenu = <-dataChan
+			break
+		}
+		// Tampilkan spinner
+		fmt.Printf("\rLoading Data... %s", spinner[i])
+		i = (i + 1) % len(spinner)
+		time.Sleep(100 * time.Millisecond)
+	}
+	// Hapus teks loading
+	fmt.Print("\rLoading Data Menu... Selesai!   \n")
+
 choiceKategori:
 	for {
 		welcMess()
 		choice := utils.ReadString("Pilih angka (1-5): ")
 
-		filMenu = feature.FilterMenu(menu.ListMenu(jsonMenu), choice)
+		filMenu = feature.FilterMenu(dataMenu, choice)
 		if choice == "5" {
 			goto cartDisplay
 		}
@@ -171,6 +203,8 @@ inputQty:
 
 cartDisplay:
 	for {
+		fmt.Println("Masuk Ke Cart...")
+		time.Sleep(2 * time.Second)
 		if len(carts) == 0 {
 			fmt.Println("Keranjang Masih Kosong Silahkan Pesan dulu")
 			goto choiceKategori
